@@ -2,15 +2,15 @@
 
 TMP_FOLDER=$(mktemp -d)
 CONFIG_FILE='pure.conf'
-CONFIGFOLDER='/root/.pure'
+CONFIGFOLDER='/root/.pure-n'
 COIN_DAEMON='pured'
-COIN_CLI='pured'
+COIN_CLI='pure-cli'
 COIN_PATH='/usr/local/bin/'
-COIN_TGZ='https://github.com/zoldur/Pure/releases/download/v1.0.0.0/pured.tar.gz'
+COIN_TGZ='https://github.com/puredev321/pure-v2/releases/download/v2.0.0.0/pure-v2-v2.0.0.0-linux64.tar.gz'
 COIN_ZIP=$(echo $COIN_TGZ | awk -F'/' '{print $NF}')
 COIN_NAME='Pure'
-COIN_PORT=32745
-RPC_PORT=32746
+COIN_PORT=47120
+RPC_PORT=47121
 
 NODEIP=$(curl -s4 icanhazip.com)
 
@@ -25,10 +25,9 @@ function download_node() {
   cd $TMP_FOLDER >/dev/null 2>&1
   wget -q $COIN_TGZ
   compile_error
-  tar xvzf $COIN_ZIP
-  chmod +x $COIN_DAEMON
-  cp $COIN_DAEMON $COIN_PATH
-  cd ~ >/dev/null 2>&1
+  tar xvzf $COIN_ZIP --strip 1
+  cp $COIN_DAEMON $COIN_CLI $COIN_PATH
+  cd - >/dev/null 2>&1
   rm -rf $TMP_FOLDER >/dev/null 2>&1
   clear
 }
