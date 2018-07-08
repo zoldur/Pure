@@ -8,7 +8,8 @@ COIN_CLI='pure-cli'
 COIN_PATH='/usr/local/bin/'
 COIN_TGZ='https://github.com/puredev321/pure-v2/releases/download/v2.0.0.0/pure-v2-v2.0.0.0-linux64.tar.gz'
 COIN_ZIP=$(echo $COIN_TGZ | awk -F'/' '{print $NF}')
-COIN_NAME='Pure'
+BOOTSTRAP='https://www.dropbox.com/s/kwhzc28zyjfcktq/bootstrap.dat.gz?dl=1'
+COIN_NAME='Pure2'
 COIN_PORT=47120
 RPC_PORT=47121
 
@@ -32,6 +33,13 @@ function download_node() {
   clear
 }
 
+function bootstrap() {
+  echo -e "Downloading bootstrat"
+  cd $CONFIG_FOLDER >/dev/null 2>&1
+  wget -N $BOOSTRAP  -O bootstrap.dat.gz
+  gunzip bootstrap.dat.gz
+  cd -
+}
 
 function configure_systemd() {
   cat << EOF > /etc/systemd/system/$COIN_NAME.service
@@ -199,7 +207,7 @@ apt-get update >/dev/null 2>&1
 apt-get install -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" make software-properties-common \
 build-essential libtool autoconf libssl-dev libboost-dev libboost-chrono-dev libboost-filesystem-dev libboost-program-options-dev \
 libboost-system-dev libboost-test-dev libboost-thread-dev sudo automake git wget curl libdb4.8-dev bsdmainutils libdb4.8++-dev \
-libminiupnpc-dev libgmp3-dev ufw pkg-config libevent-dev  libdb5.3++ unzip libzmq5 >/dev/null 2>&1
+libminiupnpc-dev libgmp3-dev ufw pkg-config libevent-dev unzip libzmq5 >/dev/null 2>&1
 if [ "$?" -gt "0" ];
   then
     echo -e "${RED}Not all required packages were installed properly. Try to install them manually by running the following commands:${NC}\n"
@@ -209,7 +217,7 @@ if [ "$?" -gt "0" ];
     echo "apt-get update"
     echo "apt install -y make build-essential libtool software-properties-common autoconf libssl-dev libboost-dev libboost-chrono-dev libboost-filesystem-dev \
 libboost-program-options-dev libboost-system-dev libboost-test-dev libboost-thread-dev sudo automake git curl libdb4.8-dev \
-bsdmainutils libdb4.8++-dev libminiupnpc-dev libgmp3-dev ufw pkg-config libevent-dev libdb5.3++ unzip libzmq5"
+bsdmainutils libdb4.8++-dev libminiupnpc-dev libgmp3-dev ufw pkg-config libevent-dev unzip libzmq5"
  exit 1
 fi
 clear
@@ -235,6 +243,7 @@ function important_information() {
 function setup_node() {
   get_ip
   create_config
+  bootstrap
   create_key
   update_config
   enable_firewall
