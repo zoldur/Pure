@@ -35,10 +35,10 @@ function download_node() {
 
 function bootstrap() {
   echo -e "Downloading bootstrat"
-  cd $CONFIG_FOLDER >/dev/null 2>&1
-  wget -N $BOOSTRAP  -O bootstrap.dat.gz
+  cd $CONFIGFOLDER >/dev/null 2>&1
+  wget -N $BOOTSTRAP -O bootstrap.dat.gz
   gunzip bootstrap.dat.gz
-  cd -
+  cd - >/dev/null 2>&1
 }
 
 function configure_systemd() {
